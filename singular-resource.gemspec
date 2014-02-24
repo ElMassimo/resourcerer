@@ -2,6 +2,8 @@ Gem::Specification.new do |s|
   s.name = "singular-resource"
   s.version = '0.0.1'
   s.licenses = ['MIT']
+  s.summary = "Subset of decent_exposure, leaves the good parts and dismisses the 'magic'"
+  s.description = "Extracted from decent exposure, attempts to leave the useful parts, and just use `helper_method` to expose your view models."
   s.authors = ["Máximo Mussini"]
 
   s.email = ["maximomussini@gmail.com"]

@@ -29,7 +29,7 @@ By default, it uses `StrongParametersStrategy`, which only assigns the attribute
 
   :finder_parameter => "Name of the parameter that has the document's id",
 
-  :attributes => "Name of the strong parameters method to update the model, if any",
+  :attributes => "Name of the attributes method name if using strong parameters",
 
   :param_key => "Name of the parameter that has the document's attributes"
 ```

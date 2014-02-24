@@ -17,10 +17,10 @@ module SingularResource
     end
 
     def parameter
-      "#{model.name.singular}_id"
+      "#{model.name.singularize}_id"
     end
 
-    def class_for(name)
+    def self.class_for(name)
       name.to_s.classify.constantize
     end
   end

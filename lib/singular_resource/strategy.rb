@@ -25,7 +25,7 @@ module SingularResource
                    options[:model]
                  else
                    name_or_model = options[:model] || name
-                   inflector.class_for(name_or_model)
+                   SingularResource::Inflector.class_for(name_or_model)
                  end
     end
 

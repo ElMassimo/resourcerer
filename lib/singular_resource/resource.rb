@@ -1,4 +1,4 @@
-require 'singular_resource/strategizer'
+require 'singular_resource/finder_strategizer'
 require 'singular_resource/configuration'
 
 module SingularResource

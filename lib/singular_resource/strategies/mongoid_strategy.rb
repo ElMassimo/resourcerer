@@ -18,7 +18,7 @@ module SingularResource
       if id
         options[:optional] ? model.where(id: id).first : model.find(id)
       else
-        scope.new
+        model.new
       end
     end
   end

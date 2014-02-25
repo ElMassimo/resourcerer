@@ -12,9 +12,18 @@ Expose the model in any way, scope the query to a collection method if defined, 
 
 
 ## Use
-It provides a private method that performs a query for the document when invoked, unless the id is not defined (`new`, `create`), in which case it returns an initialized model.
+It provides a private method that performs a query for the document when invoked whenever id is defined.
+When there is no id parameter, like in `new` and `create`, it returns an initialized model.
 ```ruby
-   singular_resource :patient
+   # app/controllers/person_controller.rb
+   class PersonController < ApplicationController
+      singular_resource :person
+      
+      def destroy
+         person.destroy
+         redirect_to action: :index
+      end
+   end
 ```
 
 #### Strategies
@@ -23,15 +32,15 @@ By default, it uses `StrongParametersStrategy`, which only assigns the attribute
 
 #### Options
 ``` ruby
-  :optional => "True if shouldn't fail if document does not exist",
+          optional: "Return nil if the document does not exist when passed a truthy value",
 
-  :model => "Class or name of the model class",
+             model: "Class or name of the model class",
 
-  :finder_parameter => "Name of the parameter that has the document's id",
+  finder_parameter: "Name of the parameter that has the document's id",
 
-  :attributes => "Name of the attributes method name if using strong parameters",
+        attributes: "Name of the attributes method name if using strong parameters",
 
-  :param_key => "Name of the parameter that has the document's attributes"
+         param_key: "Name of the parameter that has the document's attributes"
 ```
 
 ## Comparison
@@ -158,7 +167,7 @@ class Controller
 end
 ```
 
-If you think that the `before_filter` is nasty or don't like ivars in your views, so do I! Check the [present](http://github.com/ElMassimo/present) gem
+If you think that the `before_filter` is nasty or don't like ivars in your views, so do I! Check the [presenter_rails](http://github.com/ElMassimo/presenter_rails) gem
 
 ### Special Thanks
 Singular Resource is a subset of [decent_exposure](https://github.com/voxdolo/decent_exposure).

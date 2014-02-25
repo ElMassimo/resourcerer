@@ -34,5 +34,131 @@ By default, it uses `StrongParametersStrategy`, which only assigns the attribute
   :param_key => "Name of the parameter that has the document's attributes"
 ```
 
+## Comparison
+What `singular_resource` proposes is that you go from this:
+
+```ruby
+class Controller
+  def new
+    @person = Person.new(params[:person])
+  end
+
+  def create
+    @person = Person.new(params[:person])
+    if @person.save
+      redirect_to(@person)
+    else
+      render :new
+    end
+  end
+
+  def edit
+    @person = Person.find(params[:id])
+  end
+
+  def update
+    @person = Person.find(params[:id])
+    if @person.update_attributes(params[:person])
+      redirect_to(@person)
+    else
+      render :edit
+    end
+  end
+end
+```
+
+To something like this:
+
+```ruby
+class Controller
+  expose(:person)
+
+  def create
+    if person.save
+      redirect_to(person)
+    else
+      render :new
+    end
+  end
+
+  def update
+    if person.save
+      redirect_to(person)
+    else
+      render :edit
+    end
+  end
+end
+```
+
+### With [draper](http://github.com/drapergem/draper)
+
+If you use decorators, you can go from something like this:
+
+```ruby
+class Controller
+  def new
+    @person = Person.new(params[:person]).decorate
+  end
+
+  def create
+    @person = Person.new(params[:person])
+    if @person.save
+      redirect_to(@person)
+    else
+      @person = @person.decorate
+      render :new
+    end
+  end
+
+  def edit
+    @person = Person.find(params[:id]).decorate
+  end
+
+  def update
+    @person = Person.find(params[:id])
+    if @person.update_attributes(params[:person])
+      redirect_to(@person)
+    else
+      @person = @person.decorate
+      render :edit
+    end
+  end
+end
+```
+
+To something like this:
+
+```ruby
+class Controller
+  before_filter :decorate_person
+
+  singular_resource(:person)
+
+  def create
+    if person.save
+      redirect_to(person)
+    else
+      render :new
+    end
+  end
+
+  def update
+    if person.save
+      redirect_to(person)
+    else
+      render :edit
+    end
+  end
+
+  private
+    def decorate_person
+      @person = person.decorate
+    end
+end
+```
+
+If you think that the `before_filter` is nasty or don't like ivars in your views, so do I! Check the [present](http://github.com/ElMassimo/present) gem
+
 ### Special Thanks
 Singular Resource is a subset of [decent_exposure](https://github.com/voxdolo/decent_exposure).

@@ -7,7 +7,7 @@ module SingularResource
     delegate :parameter,      :to => :inflector
 
     def id
-      @id ||= params[parameter] || params[finder_parameter]
+      params[parameter] || params[finder_parameter]
     end
 
     def finder_parameter

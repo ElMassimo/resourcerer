@@ -8,7 +8,7 @@ It provides a private method that performs a query for the document when invoked
 When there is no id parameter, like in `new` and `create`, it returns an initialized model.
 
 ### Attributes
-Attributes can be assigned from a method or params, and are assigned on POST/PATCH/PUT requests
+Attributes can be assigned from a method or params, and are assigned on POST/PATCH/PUT requests.
 ```ruby
    # app/controllers/person_controller.rb
    class PersonController < ApplicationController
@@ -44,7 +44,7 @@ Attributes can be assigned from a method or params, and are assigned on POST/PAT
 
 #### Strategies
 Like `decent_exposure`, it's configurable, and provides different strategies.
-By default, it uses `StrongParametersStrategy`, which assumes that there is a `_params` method available that corresponds to the resource if a method name is provided via the `attributes` option.
+By default, it uses `StrongParametersStrategy`, which assumes that there is a `_params` method available that corresponds to the resource's name as in `person_params`. The method's name can be overriden with the `attributes` option, and assignment can be disabled by passing `false`.
 
 #### Options
 ``` ruby

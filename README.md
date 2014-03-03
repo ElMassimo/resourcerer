@@ -3,32 +3,48 @@ Singular Resource
 
 Extracted from decent exposure, attempts to leave the useful parts, and just use `helper_method` to expose your view models.
 
-## DOES
-Allow you to find or initialize a simple resource, removing the boilerplate from CRUD actions.
-
-
-## DOES NOT
-Expose the model in any way, scope the query to a collection method if defined, or deal with collections.
-
-
 ## Use
 It provides a private method that performs a query for the document when invoked whenever id is defined.
 When there is no id parameter, like in `new` and `create`, it returns an initialized model.
+
+### Attributes
+Attributes can be assigned from a method or params, and are assigned on POST/PATCH/PUT requests
 ```ruby
    # app/controllers/person_controller.rb
    class PersonController < ApplicationController
       singular_resource :person
       
+      def create
+        if person.save
+          redirect_to(person)
+        else
+          render :new
+        end
+      end
+
+      def update
+        if person.save
+          redirect_to(person)
+        else
+          render :edit
+        end
+      end
+      
       def destroy
          person.destroy
          redirect_to action: :index
       end
+      
+      private
+         def person_params
+            params.require(:person).permit(:name)
+         end
    end
 ```
 
 #### Strategies
 Like `decent_exposure`, it's configurable, and provides different strategies.
-By default, it uses `StrongParametersStrategy`, which only assigns the attributes if a method name is provided via the `attributes` option.
+By default, it uses `StrongParametersStrategy`, which assumes that there is a `_params` method available that corresponds to the resource if a method name is provided via the `attributes` option.
 
 #### Options
 ``` ruby
@@ -169,5 +185,14 @@ end
 
 If you think that the `before_filter` is nasty or don't like ivars in your views, so do I! Check the [presenter_rails](http://github.com/ElMassimo/presenter_rails) gem
 
+### Comparison with [decent_exposure](https://github.com/voxdolo/decent_exposure).
+
+#### Similar
+Both allow you to find or initialize a simple resource, and assign attributes, removing the boilerplate from CRUD actions.
+
+#### Differences
+SingularResource does not expose the model in any way, scope the query to a collection method if defined, nor deal with collections.
+
+
 ### Special Thanks
-Singular Resource is a subset of [decent_exposure](https://github.com/voxdolo/decent_exposure).
+Singular Resource is heavily based on [decent_exposure](https://github.com/voxdolo/decent_exposure).

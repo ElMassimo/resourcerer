@@ -96,7 +96,7 @@ To something like this:
 
 ```ruby
 class Controller
-  expose(:person)
+  singular_resource :person
 
   def create
     if person.save

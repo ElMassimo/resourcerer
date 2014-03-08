@@ -5,7 +5,7 @@ What `singular_resource` proposes is that you go from this:
 ```ruby
 class Controller
   def new
-    @person = Person.new(person_params)
+    @person = Person.new
   end
 
   def create
@@ -198,7 +198,7 @@ class ApplicationController < ActionController::Base
 end
 ```
 
-## Comparison
+## Using decorators or presenters
 ### With [draper](http://github.com/drapergem/draper)
 
 If you use decorators, you can go from something like this:
@@ -206,7 +206,7 @@ If you use decorators, you can go from something like this:
 ```ruby
 class Controller
   def new
-    @person = Person.new(person_params).decorate
+    @person = Person.new.decorate
   end
 
   def create
@@ -281,7 +281,7 @@ SingularResource is shamelessly extracted from [decent exposure](https://github.
 Both allow you to find or initialize a resource and assign attributes, removing the boilerplate from most CRUD actions.
 
 #### Differences
-SingularResource does not expose the model in any way, scope the query to a collection method if defined, nor deal with collections.
+SingularResource does not expose an object to the view in any way, scope the query to a collection method if defined, nor deal with collections.
 
 
 ### Special Thanks

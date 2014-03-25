@@ -70,7 +70,9 @@ The idea is that you don't have to write boilerplate for standard CRUD actions, 
 
 ## Usage
 
-Let's see what Resourcerer is doing behind the curtains :smiley:. This examples assume that you are using Rails 4 Strong Parameters.
+Let's see what Resourcerer is doing behind the curtains :smiley:.
+
+This examples assume that you are using Rails 4 Strong Parameters.
 
 ### Obtaining a resource:
 
@@ -133,7 +135,9 @@ resource(:person, param_key: :employee)
 
 ### DSL
 Resourcer also features a nice DSL, which is helpful when you need more control over the resource
-lifecycle. You can also access every configuration option available above:
+lifecycle.
+
+You can also access every configuration option available above:
 ```ruby
 resource(:employee) do
   model :person

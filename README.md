@@ -115,6 +115,12 @@ resource(:company, model: :enterprise)
 resource(:enterprise, finder_param: :company_id)
 ```
 
+**Specify the model attribute to use to perform the search:**
+
+```ruby
+resource(:enterprise, finder_attribute: :name)
+```
+
 **Specify how to obtain the object attributes:**
 
 ```ruby
@@ -124,6 +130,22 @@ resource(:employee, attributes_method: :person_params)
 # Specify the parameter key that holds the attributes when using the `EagerAttributesStrategy`
 resource(:person, param_key: :employee)
 ```
+
+### DSL
+Resourcer also features a nice DSL, which is helpful when you need more control over the resource
+lifecycle. You can also access every configuration option available above:
+```ruby
+resource(:employee) do
+  model :person
+  finder_attribute :name
+  find {|name| company.find_employee(name) }
+  build { company.new_employee }
+  assign { params.require(:employee).permit(:name) }
+end
+# is the same as:
+resource(:employee, model: :person, finder_attribute: :name, finder: ->(name){ company.find_employee(name) }, builder: ->{ company.new_employee }, attributes: ->{ params.require(:employee).permit(:name) })
+```
+The DSL is more convenient when you have an object oriented design and want to allow an object to handle its collections, or as a quick way to set the StrongParameters method.
 
 ### Setting a distinct object for a single action
 

@@ -120,7 +120,7 @@ resource(:enterprise, finder_param: :company_id)
 **Specify the model attribute to use to perform the search:**
 
 ```ruby
-resource(:enterprise, finder_attribute: :name)
+resource(:enterprise, find_by: :name)
 ```
 
 **Specify how to obtain the object attributes:**
@@ -141,7 +141,7 @@ You can also access every configuration option available above:
 ```ruby
 resource(:employee) do
   model :person
-  finder_attribute :name
+  find_by :name
   find {|name| company.find_employee(name) }
   build { company.new_employee }
   assign { params.require(:employee).permit(:name) }

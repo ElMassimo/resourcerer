@@ -41,7 +41,7 @@ module Resourcerer
     end
 
     def finder_attribute
-      config.finder_attribute || :id
+      config.find_by || :id
     end
 
     def params

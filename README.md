@@ -283,5 +283,12 @@ Both allow you to find or initialize a resource and assign attributes, removing 
 Resourcerer does not expose an object to the view in any way, scope the query to a collection method if defined, nor deal with collections.
 
 
+### Caveats
+#### When using StrongParametersStrategy
+Since attributes are assigned on every POST, PUT, and PATCH request, sometimes when using Strong Parameters it's not desirable that the attributes method is called. For that reason, the presence of `params[param_key]` is checked before assigning attributes.
+##### Troubleshooting
+- _The attributes are not being assigned_: Check that the resource name matches the param used in the attributes method, and set the `param_key` configuration if they are different.
+- _Need an error to be thrown if the params are not present_: Use the `EagerStrongParametersStrategy`, available in the sample strategies in this repository, you can set it using the `strategy` configuration option.
+
 ### Special Thanks
 Resourcerer was inspired by [decent_exposure](https://github.com/voxdolo/decent_exposure).

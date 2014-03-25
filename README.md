@@ -1,6 +1,6 @@
-Singular Resource
+Resourcerer
 =====================
-What `singular_resource` proposes is that you go from this:
+What `resourcerer` proposes is that you go from this:
 
 ```ruby
 class Controller
@@ -41,7 +41,7 @@ To something like this:
 
 ```ruby
 class Controller
-  singular_resource :person
+  resource :person
 
   def create
     if person.save
@@ -70,12 +70,12 @@ The idea is that you don't have to write boilerplate for standard CRUD actions, 
 
 ## Usage
 
-Let's see what SingularResource is doing behind the curtains :smiley:. This examples assume that you are using Rails 4 Strong Parameters.
+Let's see what Resourcerer is doing behind the curtains :smiley:. This examples assume that you are using Rails 4 Strong Parameters.
 
 ### Obtaining a resource:
 
 ```ruby
-singular_resource :person
+resource :person
 ```
 
 **Query Explanation**
@@ -106,38 +106,23 @@ Let's take a look at some of the things you can do:
 **Specify the model name:**
 
 ```ruby
-singular_resource(:company, model: :enterprise)
+resource(:company, model: :enterprise)
 ```
 
 **Specify the parameter key to use to fetch the object:**
 
 ```ruby
-singular_resource(:enterprise, finder_parameter: :company_id)
+resource(:enterprise, finder_param: :company_id)
 ```
 
 **Specify how to obtain the object attributes:**
 
 ```ruby
 # Specify the strong parameters method's name when using the default `StrongParametersStrategy`
-singular_resource(:employee, attributes: :person_params)
+resource(:employee, attributes_method: :person_params)
 
 # Specify the parameter key that holds the attributes when using the `EagerAttributesStrategy`
-singular_resource(:person, param_key: :employee)
-```
-
-**Specifying an optional resource**
-
-```ruby
-class EmployeeController
-  singular_resource(:person, optional: true)
-  
-  def custom
-    if person
-      render :show
-    else
-      redirect_to :index
-    end
-  end
+resource(:person, param_key: :employee)
 ```
 
 ### Setting a distinct object for a single action
@@ -147,7 +132,7 @@ rest of the actions. A nice approach to circumvent this is to use the
 controller's setter methods. This example uses [presenter_rails](https://github.com/ElMassimo/presenter_rails).
 
 ```ruby
-singular_resource(:article)
+resource(:article)
 
 def show_oldest
   self.article = Article.find_oldest
@@ -161,10 +146,10 @@ end
 ### Custom strategies
 
 For times when you need custom behavior for resource finding, you can
-create your own strategy by extending `SingularResource::Strategy`:
+create your own strategy by extending `Resourcerer::Strategy`:
 
 ```ruby
-class VerifiableStrategy < SingularResource::Strategy
+class VerifiableStrategy < Resourcerer::Strategy
   delegate :current_user, :to => :controller
 
   def resource
@@ -180,22 +165,7 @@ end
 You would then use your custom strategy in your controller:
 
 ```ruby
-singular_resource(:post, strategy: VerifiableStrategy)
-```
-
-### Customizing your resources
-
-For most things, you'll be able to pass a few configuration options and get
-the desired behavior. For changes you want to affect every call to 
-`singular_resource` in a controller or controllers inheriting from it, you
-can define a `singular_configuration` block:
-
-```ruby
-class ApplicationController < ActionController::Base
-  singular_configuration do
-    strategy EagerAttributesStrategy
-  end
-end
+resource(:post, strategy: VerifiableStrategy)
 ```
 
 ## Using decorators or presenters
@@ -244,7 +214,7 @@ To something like this by adding [presenter_rails](https://github.com/ElMassimo/
 
 ```ruby
 class Controller
-  singular_resource(:person)
+  resource(:person)
   
   present :person do
     person.decorate
@@ -275,14 +245,14 @@ end
 
 ### Comparison with [decent_exposure](https://github.com/voxdolo/decent_exposure).
 
-SingularResource is shamelessly extracted from [decent exposure](https://github.com/voxdolo/decent_exposure), it attempts to be more predictable by focusing on finding a resource and assigning attributes, and discarding completely the view exposure part.
+Resourcerer is heavily inspired on [decent exposure](https://github.com/voxdolo/decent_exposure), it attempts to be more predictable by focusing on finding a resource and assigning attributes, and discarding completely the view exposure part.
 
 #### Similarities
 Both allow you to find or initialize a resource and assign attributes, removing the boilerplate from most CRUD actions.
 
 #### Differences
-SingularResource does not expose an object to the view in any way, scope the query to a collection method if defined, nor deal with collections.
+Resourcerer does not expose an object to the view in any way, scope the query to a collection method if defined, nor deal with collections.
 
 
 ### Special Thanks
-Singular Resource is heavily based on [decent_exposure](https://github.com/voxdolo/decent_exposure).
+Resourcerer was inspired by [decent_exposure](https://github.com/voxdolo/decent_exposure).

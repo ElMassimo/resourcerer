@@ -3,7 +3,7 @@ Resourcerer
 What `resourcerer` proposes is that you go from this:
 
 ```ruby
-class PersonController
+class PersonController < ApplicationController
   def new
     @person = Person.new
   end
@@ -40,7 +40,7 @@ end
 To something like this:
 
 ```ruby
-class PersonController
+class PersonController < ApplicationController
   resource :person
 
   def create
@@ -203,7 +203,7 @@ resource(:post, strategy: VerifiableStrategy)
 If you use decorators, you can go from something like this:
 
 ```ruby
-class PersonController
+class PersonController < ApplicationController
   def new
     @person = Person.new.decorate
   end
@@ -242,7 +242,7 @@ end
 To something like this by adding [presenter_rails](https://github.com/ElMassimo/presenter_rails) to the mix:
 
 ```ruby
-class PersonController
+class PersonController < ApplicationController
   resource(:person)
   
   present :person do

@@ -152,7 +152,7 @@ resource(:employee, model: :person, finder_attribute: :name, finder: ->(name){ c
 The DSL is more convenient when you have an object oriented design and want to allow an object to handle its collections, or as a quick way to set the StrongParameters method.
 
 Configuration options play well together, and the defaults try to make intelligent use of them. For example,
-setting the `finder_attribute` in the example abovie changes the `finder_param` to `person_name` instead of `person_id`, and the value of that parameter is provided to the finder block.
+setting the `finder_attribute` in the example above changes the `finder_param` to `person_name` instead of `person_id`, and the value of that parameter is provided to the finder block.
 
 ### Setting a distinct object for a single action
 

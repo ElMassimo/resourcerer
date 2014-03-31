@@ -8,10 +8,6 @@ module Resourcerer
       @options = options || {}
     end
 
-    def attributes
-      @attributes ||= options[:attributes].try(:call)
-    end
-
     def method_missing(name, *args)
       super if args.size > 1
       define_option_method(name)

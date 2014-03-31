@@ -9,7 +9,7 @@ module Resourcerer
       end
 
       def attributes
-        config.attributes
+        @attributes ||= controller_eval(config.attributes)
       end
 
       def assign_attributes?

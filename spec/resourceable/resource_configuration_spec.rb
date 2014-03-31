@@ -27,7 +27,7 @@ describe Resourcerer::ResourceConfiguration do
     Then { config.model == :person }
     And  { config.finder.call(id) == "person_id" }
     And  { config.builder.call == 'person_new' }
-    And  { config.attributes == 'person_attributes' }
+    And  { config.attributes.call == 'person_attributes' }
   end
 
   context "with a block" do
@@ -46,7 +46,7 @@ describe Resourcerer::ResourceConfiguration do
     Then { config.model == :rockstar }
     And  { config.finder.call(id) == "rockstar_name" }
     And  { config.builder.call == 'rockstar_new' }
-    And  { config.attributes == 'rockstar_attributes' }
+    And  { config.attributes.call == 'rockstar_attributes' }
   end
 
   context "with options and a block" do
@@ -60,7 +60,7 @@ describe Resourcerer::ResourceConfiguration do
 
     Then { config.finder.call(id) == "rockstar_#{id}" }
     And  { config.builder.call == 'person_new' }
-    And  { config.attributes == 'person_attributes' }
+    And  { config.attributes.call == 'person_attributes' }
     And  { config.model == :rockstar }
   end
 end

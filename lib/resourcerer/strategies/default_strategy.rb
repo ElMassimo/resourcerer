@@ -23,11 +23,17 @@ module Resourcerer
       end
 
       def find_resource(id)
-        config.finder.try(:call, id) || model.find_by(finder_attribute => id)
+        controller_eval(config.finder, id) || model.find_by(finder_attribute => id)
       end
 
       def build_resource
-        config.builder.try(:call) || model.new
+        controller_eval(config.builder) || model.new
+      end
+
+      protected
+
+      def controller_eval(proc, *args)
+        controller.instance_exec(*args, &proc) if proc
       end
     end
   end

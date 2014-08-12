@@ -1,9 +1,9 @@
 Gem::Specification.new do |s|
   s.name = "resourcerer"
-  s.version = '0.2.3'
+  s.version = '0.3.0'
   s.licenses = ['MIT']
   s.summary = "Dry up your controllers by defining resources"
-  s.description = "Extracted from decent exposure, allows you to define resources to automate finding a record and assigning attributes."
+  s.description = "Define resources to automate finding a record and assigning attributes."
   s.authors = ["Máximo Mussini"]
 
   s.email = ["maximomussini@gmail.com"]
@@ -17,5 +17,5 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_runtime_dependency 'activesupport'
-  s.add_runtime_dependency 'simple_memoizer'
+  s.add_runtime_dependency 'pakiderm'
 end

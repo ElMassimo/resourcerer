@@ -1,5 +1,8 @@
 require 'rspec/given'
 require 'pry'
+require 'coveralls'
+
+Coveralls.wear!
 
 def stub_module(full_name, &block)
   stub_class_or_module(full_name, Module)
@@ -31,8 +34,4 @@ def stub_class_or_module(full_name, kind, &block)
       context.extend(mod)
     end
   end
-end
-
-RSpec.configure do |config|
-  config.color_enabled = true
 end

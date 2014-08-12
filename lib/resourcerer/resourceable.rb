@@ -1,10 +1,18 @@
 require 'resourcerer/resource'
-require 'simple_memoizer'
+require 'resourcerer/strategies/optional_strategy'
+require 'pakiderm'
 
 module Resourcerer
   module Resourceable
     extend ActiveSupport::Concern
-    include SimpleMemoizer
+
+    included do
+      extend Pakiderm
+    end
+
+    def resource(name, options={}, &block)
+      Resource.for(name, options.merge(strategy: Strategies::OptionalStrategy), block).call(self)
+    end
 
     module ClassMethods
 
@@ -13,7 +21,7 @@ module Resourcerer
       end
 
       def resource(name, options={}, &block)
-        check_method_available!(name)
+        check_method_available(name)
         _resources[name] = resource = Resource.for(name, options, block)
         define_resource_method(name, resource)
       end
@@ -22,16 +30,13 @@ module Resourcerer
 
       def define_resource_method(name, resource)
         define_method(name) { resource.call(self) }
-        memoize name
+        memoize name, assignable: true
         hide_action name, "#{name}="
       end
 
-      def check_method_available!(name)
+      def check_method_available(name)
         if self.respond_to?(name.to_sym)
-          Kernel.abort "[ERROR] You are adding a singular resource by the `#{name}` method, " \
-            "which overrides an existing method of the same name. " \
-            "Consider a different resource name\n" \
-            "#{caller.first}"
+          Kernel.warn "[Resourcerer] Overriding #{name} method."
         end
       end
     end

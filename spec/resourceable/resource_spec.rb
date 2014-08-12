@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'active_support/concern'
 require 'resourcerer/resource'
 
 describe Resourcerer::Resource do

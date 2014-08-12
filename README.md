@@ -145,6 +145,7 @@ resource(:employee) do
   find {|name| company.find_employee(name) }
   build { company.new_employee }
   assign { params.require(:employee).permit(:name) }
+  permit [:name, :description]
 end
 # is the same as:
 resource(:employee, model: :person, finder_attribute: :name, finder: ->(name){ company.find_employee(name) }, builder: ->{ company.new_employee }, attributes: ->{ params.require(:employee).permit(:name) })
@@ -280,7 +281,7 @@ Resourcerer is heavily inspired on [decent exposure](https://github.com/voxdolo/
 Both allow you to find or initialize a resource and assign attributes, removing the boilerplate from most CRUD actions.
 
 #### Differences
-Resourcerer does not expose an object to the view in any way, scope the query to a collection method if defined, nor deal with collections.
+Resourcerer does not expose an object to the view in any way, scope the query to a collection method if defined, nor deal with collections. It also has better support for strong parameters.
 
 
 ### Caveats

@@ -161,12 +161,9 @@ controller's setter methods. This example uses [presenter_rails](https://github.
 ```ruby
 resource(:article)
 
-def show_oldest
+def oldest
   self.article = Article.find_oldest
-end
-
-present :article do
-  ArticlePresenter.new(article)
+  render :show
 end
 ```
 
@@ -241,7 +238,9 @@ To something like this by adding [presenter_rails](https://github.com/ElMassimo/
 
 ```ruby
 class PersonController < ApplicationController
-  resource(:person)
+  resource :person do
+    permit :name
+  end
 
   present :person do
     person.decorate
@@ -262,11 +261,6 @@ class PersonController < ApplicationController
       render :edit
     end
   end
-
-  private
-    def person_params
-      params.require(:person).permit(:name)
-    end
 end
 ```
 

@@ -41,7 +41,9 @@ To something like this:
 
 ```ruby
 class PersonController < ApplicationController
-  resource :person
+  resource :person do
+    permit [:name]
+  end
 
   def create
     if person.save
@@ -58,11 +60,6 @@ class PersonController < ApplicationController
       render :edit
     end
   end
-  
-  private
-    def person_params
-      params.require(:person).permit(:name)
-    end
 end
 ```
 

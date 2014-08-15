@@ -1,4 +1,4 @@
-Resourcerer
+Resourcerer [![Gem Version](https://badge.fury.io/rb/resourcerer.svg)](http://badge.fury.io/rb/resourcerer) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ElMassimo/queryable/blob/master/LICENSE.txt)
 =====================
 What `resourcerer` proposes is that you go from this:
 

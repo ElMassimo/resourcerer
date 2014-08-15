@@ -29,7 +29,7 @@ class PersonController < ApplicationController
       render :edit
     end
   end
-  
+
   private
     def person_params
       params.require(:person).permit(:name)
@@ -100,6 +100,28 @@ resource :person
 
 ### Configuration
 
+### DSL
+Resourcer also features a nice DSL, which is helpful when you need more control over the resource
+lifecycle.
+
+You can also access every configuration option available above:
+```ruby
+resource(:employee) do
+  model :person
+  find_by :name
+  find {|name| company.find_employee(name) }
+  build { company.new_employee }
+  assign { params.require(:employee).permit(:name) }
+  permit [:name, :description]
+end
+# is the same as:
+resource(:employee, model: :person, finder_attribute: :name, finder: ->(name){ company.find_employee(name) }, builder: ->{ company.new_employee }, attributes: ->{ params.require(:employee).permit(:name) })
+```
+The DSL is more convenient when you have an object oriented design and want to allow an object to handle its collections, or as a quick way to set the StrongParameters method.
+
+Configuration options play well together, and the defaults try to make intelligent use of them. For example,
+setting the `finder_attribute` in the example above changes the `finder_param` to `person_name` instead of `person_id`, and the value of that parameter is provided to the finder block.
+
 Let's take a look at some of the things you can do:
 
 **Specify the model name:**
@@ -129,28 +151,6 @@ resource(:employee, attributes_method: :person_params)
 # Specify the parameter key that holds the attributes when using the `EagerAttributesStrategy`
 resource(:person, param_key: :employee)
 ```
-
-### DSL
-Resourcer also features a nice DSL, which is helpful when you need more control over the resource
-lifecycle.
-
-You can also access every configuration option available above:
-```ruby
-resource(:employee) do
-  model :person
-  find_by :name
-  find {|name| company.find_employee(name) }
-  build { company.new_employee }
-  assign { params.require(:employee).permit(:name) }
-  permit [:name, :description]
-end
-# is the same as:
-resource(:employee, model: :person, finder_attribute: :name, finder: ->(name){ company.find_employee(name) }, builder: ->{ company.new_employee }, attributes: ->{ params.require(:employee).permit(:name) })
-```
-The DSL is more convenient when you have an object oriented design and want to allow an object to handle its collections, or as a quick way to set the StrongParameters method.
-
-Configuration options play well together, and the defaults try to make intelligent use of them. For example,
-setting the `finder_attribute` in the example above changes the `finder_param` to `person_name` instead of `person_id`, and the value of that parameter is provided to the finder block.
 
 ### Setting a distinct object for a single action
 
@@ -229,7 +229,7 @@ class PersonController < ApplicationController
       render :edit
     end
   end
-  
+
   private
     def person_params
       params.require(:person).permit(:name)
@@ -242,7 +242,7 @@ To something like this by adding [presenter_rails](https://github.com/ElMassimo/
 ```ruby
 class PersonController < ApplicationController
   resource(:person)
-  
+
   present :person do
     person.decorate
   end

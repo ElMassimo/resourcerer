@@ -111,11 +111,12 @@ resource(:employee) do
   find_by :name
   find {|name| company.find_employee(name) }
   build { company.new_employee }
+  collection { company.employees }
   assign { params.require(:employee).permit(:name) }
   permit [:name, :description]
 end
 # is the same as:
-resource(:employee, model: :person, finder_attribute: :name, finder: ->(name){ company.find_employee(name) }, builder: ->{ company.new_employee }, attributes: ->{ params.require(:employee).permit(:name) })
+resource(:employee, model: :person, finder_attribute: :name, finder: ->(name){ company.find_employee(name) }, builder: ->{ company.new_employee }, collection: ->{ company.employees }, attributes: ->{ params.require(:employee).permit(:name) })
 ```
 The DSL is more convenient when you have an object oriented design and want to allow an object to handle its collections, or as a quick way to set the StrongParameters method.
 
@@ -140,6 +141,12 @@ resource(:enterprise, finder_param: :company_id)
 
 ```ruby
 resource(:enterprise, find_by: :name)
+```
+
+**Specify a parent collection to find or create the object from:**
+
+```ruby
+resource(:enterprise, collection: ->{ company.employees })
 ```
 
 **Specify how to obtain the object attributes:**

@@ -18,22 +18,22 @@ module Resourcerer
         @id ||= params[finder_param] || params[finder_attribute]
       end
 
-      def finder_param
-        config.finder_param || inflector.finder_param
-      end
-
       def find_resource(id)
-        controller_eval(config.finder, id) || model.find_by(finder_attribute => id)
+        controller_eval(config.finder, id) || collection.find_by(finder_attribute => id)
       end
 
       def build_resource
-        controller_eval(config.builder) || model.new
+        controller_eval(config.builder) || collection.new
       end
 
       protected
 
       def controller_eval(proc, *args)
         controller.instance_exec(*args, &proc) if proc
+      end
+
+      def collection
+        controller_eval(config.collection) || model
       end
     end
   end

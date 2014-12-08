@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "resourcerer"
-  s.version = '0.3.0'
+  s.version = '1.0.0'
   s.licenses = ['MIT']
   s.summary = "Dry up your controllers by defining resources"
   s.description = "Define resources to automate finding a record and assigning attributes."

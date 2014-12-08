@@ -44,6 +44,12 @@ module Resourcerer
       config.find_by || :id
     end
 
+    def finder_param
+      config.finder_param ||
+        (config.param_key && "#{config.param_key}_#{finder_attribute}") ||
+        inflector.finder_param
+    end
+
     def params
       controller.params
     end

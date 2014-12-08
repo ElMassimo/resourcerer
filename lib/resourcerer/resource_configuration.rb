@@ -37,5 +37,13 @@ module Resourcerer
     def assign(&block)
       options[:attributes] = block
     end
+
+    def collection(proc=nil, &block)
+      if proc = (proc || block)
+        options[:collection] = proc
+      else
+        options[:collection]
+      end
+    end
   end
 end

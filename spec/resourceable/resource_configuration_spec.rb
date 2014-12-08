@@ -10,13 +10,15 @@ describe Resourcerer::ResourceConfiguration do
       model: model_name,
       finder: ->(finder_id) { "#{model_name}_#{finder_id}" },
       builder: -> { "#{model_name}_new" },
-      attributes: -> { "#{model_name}_attributes" }
+      attributes: -> { "#{model_name}_attributes" },
+      collection: -> { custom_collection }
     }.merge(options)
   end
 
   Given(:config) { Resourcerer::ResourceConfiguration.new(options) }
   Given(:model_name) { :person }
   Given(:id) { 'id' }
+  Given(:custom_collection) { double('collection') }
 
   When { config.instance_eval(&block) if block }
 
@@ -28,6 +30,7 @@ describe Resourcerer::ResourceConfiguration do
     And  { config.finder.call(id) == "person_id" }
     And  { config.builder.call == 'person_new' }
     And  { config.attributes.call == 'person_attributes' }
+    And  { config.collection.call == custom_collection }
   end
 
   context "with a block" do
@@ -35,11 +38,13 @@ describe Resourcerer::ResourceConfiguration do
     Given(:options) { nil }
     Given(:block) do
       model_name = :rockstar
+      my_collection = custom_collection
       Proc.new {
         model model_name
         find { |finder_id| "#{model_name}_#{finder_id}" }
         build { "#{model_name}_new" }
         assign { "#{model_name}_attributes" }
+        collection { my_collection }
       }
     end
 
@@ -47,6 +52,7 @@ describe Resourcerer::ResourceConfiguration do
     And  { config.finder.call(id) == "rockstar_name" }
     And  { config.builder.call == 'rockstar_new' }
     And  { config.attributes.call == 'rockstar_attributes' }
+    And  { config.collection.call == custom_collection }
   end
 
   context "with options and a block" do

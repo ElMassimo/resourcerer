@@ -1,0 +1,8 @@
+language: ruby
+rvm:
+  - 2.2.2
+  - 2.3.0
+gemfile:
+  - Gemfile
+  - gemfiles/Gemfile.rails-5.0.2
+  - gemfiles/Gemfile.rails-4.2.7

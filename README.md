@@ -1,269 +1,281 @@
-Resourcerer [![Gem Version](https://badge.fury.io/rb/resourcerer.svg)](http://badge.fury.io/rb/resourcerer) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ElMassimo/queryable/blob/master/LICENSE.txt)
+Resourcerer [![Gem Version](https://img.shields.io/gem/v/resourcerer.svg?colorB=e9573f)](https://rubygems.org/gems/resourcerer) [![Build Status](https://travis-ci.org/ElMassimo/resourcerer.svg)](https://travis-ci.org/ElMassimo/resourcerer) [![Coverage Status](https://coveralls.io/repos/github/ElMassimo/resourcerer/badge.svg?branch=master)](https://coveralls.io/github/ElMassimo/resourcerer?branch=master) [![Inline docs](http://inch-ci.org/github/ElMassimo/resourcerer.svg)](http://inch-ci.org/github/ElMassimo/resourcerer) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ElMassimo/resourcerer/blob/master/LICENSE.txt)
 =====================
-What `resourcerer` proposes is that you go from this:
+
+A small library to help you avoid boilerplate for standard CRUD actions, while improving your controllers' readibility.
+
+### Installation
+
+Add this line to your application's Gemfile:
 
 ```ruby
-class PersonController < ApplicationController
-  def new
-    @person = Person.new
+gem 'resourcerer'
+```
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install resourcerer
+
+### Usage
+
+In the simplest scenario you'll just use it to define a resource in the controller:
+
+```ruby
+class BandsController < ApplicationController
+  resource :band
+end
+```
+
+Now every time you call `band` in your controller or view, it will look for an
+ID and try to perform `Band.find(id)`. If an ID parameter isn't found, it will
+call `Band.new(band_params)`. The result will be memoized in a
+`@resourcerer_band` instance variable.
+
+#### Example
+
+Here's what a standard Rails CRUD controller using Resourcerer might look like:
+
+```ruby
+class BandsController < ApplicationController
+  resource :band do
+    permit [:name, :genre]
   end
 
   def create
-    @person = Person.new(person_params)
-    if @person.save
-      redirect_to(@person)
-    else
-      render :new
-    end
-  end
-
-  def edit
-    @person = Person.find(params[:id])
-  end
-
-  def update
-    @person = Person.find(params[:id])
-    if @person.update_attributes(person_params)
-      redirect_to(@person)
-    else
-      render :edit
-    end
-  end
-
-  private
-    def person_params
-      params.require(:person).permit(:name)
-    end
-end
-```
-
-To something like this:
-
-```ruby
-class PersonController < ApplicationController
-  resource :person do
-    permit [:name]
-  end
-
-  def create
-    if person.save
-      redirect_to(person)
-    else
-      render :new
-    end
-  end
-
-  def update
-    if person.save
-      redirect_to(person)
-    else
-      render :edit
-    end
-  end
-end
-```
-
-The idea is that you don't have to write boilerplate for standard CRUD actions, while at the same time improving your controllers readibility.
-
-## Usage
-
-Let's see what Resourcerer is doing behind the curtains :smiley:.
-
-This examples assume that you are using Rails 4 Strong Parameters.
-
-### Obtaining a resource:
-
-```ruby
-resource :person
-```
-
-**Query Explanation**
-
-<table>
-  <tr>
-    <td><code>id</code> present?</td>
-    <td>Query (get/delete)</td>
-    <td>Query (post/patch/put)</td>
-  </tr>
-  <tr>
-    <td><code>true</code></td>
-    <td><code>Person.find(params[:id])</code></td>
-    <td><code>Person.find(params[:id]).attributes = person_params</code></td>
-  </tr>
-  <tr>
-    <td><code>false</code></td>
-    <td><code>Person.new</code></td>
-    <td><code>Person.new(person_params)</code></td>
-  </tr>
-</table>
-
-
-### Configuration
-
-### DSL
-Resourcer also features a nice DSL, which is helpful when you need more control over the resource
-lifecycle.
-
-You can also access every configuration option available above:
-```ruby
-resource(:employee) do
-  model :person
-  find_by :name
-  find {|name| company.find_employee(name) }
-  build { company.new_employee }
-  collection { company.employees }
-  assign { params.require(:employee).permit(:name) }
-  permit [:name, :description]
-end
-# is the same as:
-resource(:employee, model: :person, finder_attribute: :name, finder: ->(name){ company.find_employee(name) }, builder: ->{ company.new_employee }, collection: ->{ company.employees }, attributes: ->{ params.require(:employee).permit(:name) })
-```
-The DSL is more convenient when you have an object oriented design and want to allow an object to handle its collections, or as a quick way to set the StrongParameters method.
-
-Configuration options play well together, and the defaults try to make intelligent use of them. For example,
-setting the `finder_attribute` in the example above changes the `finder_param` to `person_name` instead of `person_id`, and the value of that parameter is provided to the finder block.
-
-Let's take a look at some of the things you can do:
-
-**Specify the model name:**
-
-```ruby
-resource(:company, model: :enterprise)
-```
-
-**Specify the parameter key to use to fetch the object:**
-
-```ruby
-resource(:enterprise, finder_param: :company_id)
-```
-
-**Specify the model attribute to use to perform the search:**
-
-```ruby
-resource(:enterprise, find_by: :name)
-```
-
-**Specify a parent collection to find or create the object from:**
-
-```ruby
-resource(:enterprise, collection: ->{ company.employees })
-```
-
-**Specify how to obtain the object attributes:**
-
-```ruby
-# Specify the strong parameters method's name when using the default `StrongParametersStrategy`
-resource(:employee, attributes_method: :person_params)
-
-# Specify the parameter key that holds the attributes when using the `EagerAttributesStrategy`
-resource(:person, param_key: :employee)
-```
-
-### Setting a distinct object for a single action
-
-There are times when one action in a controller is different from the
-rest of the actions. A nice approach to circumvent this is to use the
-controller's setter methods. This example uses [presenter_rails](https://github.com/ElMassimo/presenter_rails).
-
-```ruby
-resource(:article)
-
-def oldest
-  self.article = Article.find_oldest
-  render :show
-end
-```
-
-### Custom strategies
-
-For times when you need custom behavior for resource finding, you can
-create your own strategy by extending `Resourcerer::Strategy`:
-
-```ruby
-class VerifiableStrategy < Resourcerer::Strategy
-  delegate :current_user, :to => :controller
-
-  def resource
-    instance = model.find(params[:id])
-    if current_user != instance.user
-      raise ActiveRecord::RecordNotFound
-    end
-    instance
-  end
-end
-```
-
-You would then use your custom strategy in your controller:
-
-```ruby
-resource(:post, strategy: VerifiableStrategy)
-```
-
-## Using decorators or presenters
-### With [draper](http://github.com/drapergem/draper)
-
-If you use decorators, you can go from something like this:
-
-```ruby
-class PersonController < ApplicationController
-  def new
-    @person = Person.new.decorate
-  end
-
-  def create
-    @person = Person.new(person_params)
-    if @person.save
-      redirect_to(@person)
-    else
-      @person = @person.decorate
-      render :new
-    end
-  end
-
-  def edit
-    @person = Person.find(params[:id]).decorate
-  end
-
-  def update
-    @person = Person.find(params[:id])
-    if @person.update_attributes(person_params)
-      redirect_to(@person)
-    else
-      @person = @person.decorate
-      render :edit
-    end
-  end
-
-  private
-    def person_params
-      params.require(:person).permit(:name)
-    end
-end
-```
-
-To something like this by adding [presenter_rails](https://github.com/ElMassimo/presenter_rails) to the mix:
-
-```ruby
-class PersonController < ApplicationController
-  resource :person do
-    permit :name
-  end
-
-  present :person do
-    person.decorate
-  end
-
-  def create
-    if person.save
-      redirect_to(person)
+    if band.save
+      redirect_to band_path(band)
     else
       render :new
     end
   end
 
   def update
-    if person.save
-      redirect_to(person)
+    if band.save
+      redirect_to band_path(band)
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    band.destroy
+    redirect_to bands_path
+  end
+end
+```
+
+That's [way less code than usual!](https://gist.github.com/ElMassimo/18fbdb7108f46f3c975712945f7a3318) :smiley:
+
+### Under the Hood
+
+The default resolving workflow is pretty powerful and customizable. It could be
+expressed with the following pseudocode:
+
+```ruby
+def fetch(scope, id)
+  instance = id ? find(id, scope) : build(attrs, scope)
+  instance.tap { instance.assign_attributes(attrs) if assign? }
+end
+
+def id
+  params[:band_id] || params[:id]
+end
+
+def find(id, scope)
+  scope.find(id)
+end
+
+def build(params, scope)
+  scope.new(params) # Band.new(params)
+end
+
+def scope
+  model # Band
+end
+
+def model
+  :band.classify.constantize # Band
+end
+
+def assign?
+  action_name == 'update'
+end
+
+def attrs
+  if respond_to?(:band_params, true) && !request.get?
+    band_params
+  else
+    {}
+  end
+end
+```
+The resource is lazy, so it won't do anyband until the method is called.
+
+## Configuration
+
+It is possible to override each step with options. The acceptable options to the
+`resource` macro are:
+
+### `id`
+
+In order to fetch a resource Resourcerer relies on the presence of an ID:
+
+```ruby
+# Default Behavior
+resource :band, id: ->{ params[:band_id] || params[:id] }
+```
+
+You can override any option's default behavior by passing in a `Proc`:
+
+```ruby
+resource :band, id: ->{ 42 }
+```
+
+Passing lambdas might not always be fun, so most options provide shortcuts that
+might help make life easier:
+
+```ruby
+resource :band, id: :custom_band_id
+# same as
+resource :band, id: ->{ params[:custom_band_id] }
+
+resource :band, id: [:try_this_id, :or_maybe_that_id]
+# same as
+resource :band, id: ->{ params[:try_this_id] || params[:or_maybe_that_id] }
+```
+
+### `find`
+
+If an ID was provided, Resourcerer will try to find the model:
+
+```ruby
+# Default Behavior
+resource :band, find: -> (id, scope) { scope.find(id) }
+```
+
+Where `scope` is a model scope, like `Band` or `User.active` or
+`Post.published`. There's even a convenient shortcut for cases where the ID is
+actually something else:
+
+```ruby
+resource :band, find_by: :slug
+# same as
+resource :band, find: ->(slug, scope){ scope.find_by!(slug: slug) }
+```
+
+### `build`
+
+When an ID is not present, Resourcerer tries to build an object for you:
+
+```ruby
+# Default Behavior
+resource :band, build: ->(attrs, scope){ scope.new(band_params) }
+```
+
+### `attrs`
+
+This option is responsible for calulating params before passing them to the
+build step. The default behavior was modeled with Strong Parameters in mind and
+is somewhat smart: it calls the `band_params` controller method if it's
+available and the request method is not `GET`. In all other cases it produces
+an empty hash.
+
+You can easily specify which controller method you want it to call instead of
+`band_params`, or just provide your own logic:
+
+```ruby
+resource :band, attrs: :custom_band_params
+resource :other_band, attrs: ->{ { foo: "bar" } }
+
+private
+
+def custom_band_params
+  params.require(:band).permit(:name, :genre)
+end
+```
+
+Using the default model name conventions? `permit` can do that for you:
+
+```ruby
+resource :band, permit: [:name, :genre]
+```
+
+### `collection`
+
+Defines the scope that's used in `find` and `build` steps:
+
+```ruby
+resource :band, collection: ->{ current_user.bands }
+```
+
+### `model`
+
+Allows you to specify the model class to use:
+
+```ruby
+resource :band, model: ->{ AnotherBand }
+resource :band, model: AnotherBand
+resource :band, model: "AnotherBand"
+resource :band, model: :another_band
+```
+
+### `assign` and `assign?`
+
+Allows you to specify whether the attributes should be assigned:
+
+```ruby
+resource :band, assign?: false
+resource :band, assign?: [:edit, :update]
+resource :band, assign?: ->{ current_user.admin? }
+```
+
+and also how to assign them:
+
+```ruby
+resource :band, assign: ->(band, attrs) { band.set_info(attrs) }
+
+```
+
+
+## Advanced Configuration with `resource_config`
+
+You can define configuration presets with the `resource_config` method to reuse
+them later in different resource definitions.
+
+```ruby
+resource_config :cool_find, find: ->{ very_cool_find_code }
+resource_config :cool_build, build: ->{ very_cool_build_code }
+
+resource :band, using: [:cool_find, :cool_build]
+resource :another_band, using: :cool_build
+```
+
+Options that are passed to `resource` will take precedence over the presets.
+
+
+## Decorators or Presenters (like [draper](http://github.com/drapergem/draper))
+
+If you use decorators, you'll be able to avoid [even more boilerplate](https://gist.github.com/ElMassimo/6775148c0d7364be111531a254b41ba9) if you throw [presenter_rails](https://github.com/ElMassimo/presenter_rails) in the mix:
+
+```ruby
+class BandController < ApplicationController
+  resource(:band, permit: :name)
+  present(:band) { band.decorate }
+
+  def create
+    if band.save
+      redirect_to(band)
+    else
+      render :new
+    end
+  end
+
+  def update
+    if band.save
+      redirect_to(band)
     else
       render :edit
     end
@@ -271,23 +283,15 @@ class PersonController < ApplicationController
 end
 ```
 
-### Comparison with [decent_exposure](https://github.com/voxdolo/decent_exposure).
+### Comparison with [Decent Exposure](https://github.com/hashrocket/decent_exposure).
 
-Resourcerer is heavily inspired on [decent exposure](https://github.com/voxdolo/decent_exposure), it attempts to be more predictable by focusing on finding a resource and assigning attributes, and discarding completely the view exposure part.
+Resourcerer is heavily inspired on [Decent Exposure](https://github.com/hashrocket/decent_exposure), but it attempts to be simpler and more flexible by not focusing on exposing variables to the view context.
 
 #### Similarities
-Both allow you to find or initialize a resource and assign attributes, removing the boilerplate from most CRUD actions.
+Both allow you to find or initialize a model and assign attributes, removing the boilerplate from most CRUD actions.
 
 #### Differences
-Resourcerer does not expose an object to the view in any way, scope the query to a collection method if defined, nor deal with collections. It also has better support for strong parameters.
-
-
-### Caveats
-#### When using StrongParametersStrategy
-Since attributes are assigned on every POST, PUT, and PATCH request, sometimes when using Strong Parameters it's not desirable that the attributes method is called. For that reason, the presence of `params[param_key]` is checked before assigning attributes.
-##### Troubleshooting
-- _The attributes are not being assigned_: Check that the resource name matches the param used in the attributes method, and set the `param_key` configuration if they are different.
-- _Need an error to be thrown if the params are not present_: Use the `EagerStrongParametersStrategy`, available in the sample strategies in this repository, you can set it using the `strategy` configuration option.
+Resourcerer does not expose an object to the view in any way, nor deal with decoratation. It also provides better support for strong parameters.
 
 ### Special Thanks
-Resourcerer was inspired by [decent_exposure](https://github.com/voxdolo/decent_exposure).
+Resourcerer is based on [DecentExposure](https://github.com/hashrocket/decent_exposure).

@@ -1,5 +1,14 @@
-require 'resourcerer/resourceable'
+# frozen_string_literal: true
 
-ActiveSupport.on_load(:action_controller) do
-  include Resourcerer::Resourceable
+require 'resourcerer/version'
+require 'active_support/all'
+
+module Resourcerer
+  autoload :Configuration, 'resourcerer/configuration'
+  autoload :Controller,    'resourcerer/controller'
+  autoload :Resource,      'resourcerer/resource'
+
+  ActiveSupport.on_load :action_controller do
+    include Controller
+  end
 end

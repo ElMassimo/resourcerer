@@ -1,4 +1,13 @@
-Resourcerer [![Gem Version](https://img.shields.io/gem/v/resourcerer.svg?colorB=e9573f)](https://rubygems.org/gems/resourcerer) [![Build Status](https://travis-ci.org/ElMassimo/resourcerer.svg)](https://travis-ci.org/ElMassimo/resourcerer) [![Coverage Status](https://coveralls.io/repos/github/ElMassimo/resourcerer/badge.svg?branch=master)](https://coveralls.io/github/ElMassimo/resourcerer?branch=master) [![Inline docs](http://inch-ci.org/github/ElMassimo/resourcerer.svg)](http://inch-ci.org/github/ElMassimo/resourcerer) [![License](https://img.shields.io/badge/license-MIT-428F7E.svg)](https://github.com/ElMassimo/resourcerer/blob/master/LICENSE.txt)
+<h1 align="center">Resourcerer</h1>
+
+<p align="center">
+<a href="https://rubygems.org/gems/resourcerer"><img alt="Gem Version" src="https://img.shields.io/gem/v/resourcerer.svg?colorB=e9573f"/></a>
+<a href="https://travis-ci.org/ElMassimo/resourcerer"><img alt="Build Status" src="https://travis-ci.org/ElMassimo/resourcerer.svg"/></a>
+<a href="https://coveralls.io/github/ElMassimo/resourcerer?branch=master"><img alt="Coverage Status" src="https://coveralls.io/repos/github/ElMassimo/resourcerer/badge.svg?branch=master"/></a>
+<a href="http://inch-ci.org/github/ElMassimo/resourcerer"><img alt="Inline docs" src="http://inch-ci.org/github/ElMassimo/resourcerer.svg"/></a>
+<a href="https://github.com/ElMassimo/resourcerer/blob/master/LICENSE.txt"><img alt="License" src="https://img.shields.io/badge/license-MIT-428F7E.svg"/></a>
+</p>
+
 =====================
 
 A small library to help you avoid boilerplate for standard CRUD actions, while improving your controllers' readibility.

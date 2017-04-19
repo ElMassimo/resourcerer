@@ -1,4 +1,4 @@
-Resourcerer [![Gem Version](https://img.shields.io/gem/v/resourcerer.svg?colorB=e9573f)](https://rubygems.org/gems/resourcerer) [![Build Status](https://travis-ci.org/ElMassimo/resourcerer.svg)](https://travis-ci.org/ElMassimo/resourcerer) [![Coverage Status](https://coveralls.io/repos/github/ElMassimo/resourcerer/badge.svg?branch=master)](https://coveralls.io/github/ElMassimo/resourcerer?branch=master) [![Inline docs](http://inch-ci.org/github/ElMassimo/resourcerer.svg)](http://inch-ci.org/github/ElMassimo/resourcerer) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ElMassimo/resourcerer/blob/master/LICENSE.txt)
+Resourcerer [![Gem Version](https://img.shields.io/gem/v/resourcerer.svg?colorB=e9573f)](https://rubygems.org/gems/resourcerer) [![Build Status](https://travis-ci.org/ElMassimo/resourcerer.svg)](https://travis-ci.org/ElMassimo/resourcerer) [![Coverage Status](https://coveralls.io/repos/github/ElMassimo/resourcerer/badge.svg?branch=master)](https://coveralls.io/github/ElMassimo/resourcerer?branch=master) [![Inline docs](http://inch-ci.org/github/ElMassimo/resourcerer.svg)](http://inch-ci.org/github/ElMassimo/resourcerer) [![License](https://img.shields.io/badge/license-MIT-428F7E.svg)](https://github.com/ElMassimo/resourcerer/blob/master/LICENSE.txt)
 =====================
 
 A small library to help you avoid boilerplate for standard CRUD actions, while improving your controllers' readibility.
@@ -240,14 +240,14 @@ resource :band, assign: ->(band, attrs) { band.set_info(attrs) }
 ```
 
 
-## Advanced Configuration with `resource_config`
+## Advanced Configuration with `resourcerer_config`
 
-You can define configuration presets with the `resource_config` method to reuse
+You can define configuration presets with the `resourcerer_config` method to reuse
 them later in different resource definitions.
 
 ```ruby
-resource_config :cool_find, find: ->{ very_cool_find_code }
-resource_config :cool_build, build: ->{ very_cool_build_code }
+resourcerer_config :cool_find, find: ->{ very_cool_find_code }
+resourcerer_config :cool_build, build: ->{ very_cool_build_code }
 
 resource :band, using: [:cool_find, :cool_build]
 resource :another_band, using: :cool_build

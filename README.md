@@ -1,5 +1,5 @@
-<h1 align="center">Resourcerer</h1>
-
+<h1 align="center">
+Resourcerer
 <p align="center">
 <a href="https://rubygems.org/gems/resourcerer"><img alt="Gem Version" src="https://img.shields.io/gem/v/resourcerer.svg?colorB=e9573f"/></a>
 <a href="https://travis-ci.org/ElMassimo/resourcerer"><img alt="Build Status" src="https://travis-ci.org/ElMassimo/resourcerer.svg"/></a>
@@ -7,8 +7,7 @@
 <a href="http://inch-ci.org/github/ElMassimo/resourcerer"><img alt="Inline docs" src="http://inch-ci.org/github/ElMassimo/resourcerer.svg"/></a>
 <a href="https://github.com/ElMassimo/resourcerer/blob/master/LICENSE.txt"><img alt="License" src="https://img.shields.io/badge/license-MIT-428F7E.svg"/></a>
 </p>
-
-=====================
+</h1>
 
 A small library to help you avoid boilerplate for standard CRUD actions, while improving your controllers' readibility.
 

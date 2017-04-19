@@ -1,10 +1,10 @@
 <h1 align="center">
 Resourcerer
 <p align="center">
-<a href="https://rubygems.org/gems/resourcerer"><img alt="Gem Version" src="https://img.shields.io/gem/v/resourcerer.svg?colorB=e9573f"/></a>
 <a href="https://travis-ci.org/ElMassimo/resourcerer"><img alt="Build Status" src="https://travis-ci.org/ElMassimo/resourcerer.svg"/></a>
 <a href="https://coveralls.io/github/ElMassimo/resourcerer?branch=master"><img alt="Coverage Status" src="https://coveralls.io/repos/github/ElMassimo/resourcerer/badge.svg?branch=master"/></a>
 <a href="http://inch-ci.org/github/ElMassimo/resourcerer"><img alt="Inline docs" src="http://inch-ci.org/github/ElMassimo/resourcerer.svg"/></a>
+<a href="https://rubygems.org/gems/resourcerer"><img alt="Gem Version" src="https://img.shields.io/gem/v/resourcerer.svg?colorB=e9573f"/></a>
 <a href="https://github.com/ElMassimo/resourcerer/blob/master/LICENSE.txt"><img alt="License" src="https://img.shields.io/badge/license-MIT-428F7E.svg"/></a>
 </p>
 </h1>

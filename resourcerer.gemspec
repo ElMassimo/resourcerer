@@ -10,15 +10,15 @@ Gem::Specification.new do |s|
   s.homepage = 'https://github.com/ElMassimo/resourcerer'
   s.license = 'MIT'
   s.extra_rdoc_files = ['README.md']
-  s.files = Dir.glob('{lib}/**/*.rb') + %w(README.md)
+  s.files = Dir.glob('{lib}/**/*.rb') + %w(README.md CHANGELOG.md)
   s.test_files   = Dir.glob('{spec}/**/*.rb')
   s.require_path = 'lib'
 
-  s.required_ruby_version = '~> 2.2'
+  s.required_ruby_version = '>= 2.2'
 
   s.add_dependency 'activesupport', '>= 4.0'
   s.add_development_dependency 'activemodel'
-  s.add_development_dependency 'coveralls'
+  s.add_development_dependency 'simplecov', '< 0.18'
   s.add_development_dependency 'pry-byebug'
   s.add_development_dependency 'railties', '>= 4.0'
   s.add_development_dependency 'rspec-given', '~> 3.0'

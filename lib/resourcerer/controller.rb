@@ -16,19 +16,20 @@ module Resourcerer
         instance_accessor: false, instance_predicate: false
     end
 
-    def resource(*args)
-      Resource.new(self, *args).get(self)
+    def resource(name, **options)
+      Resource.new(self, name, **options).get(self)
     end
 
     module ClassMethods
       # Public: Defines a Resource in a controller Class.
       #
-      # *args - See Resource#initialize for details.
+      # name - The name of the method to define.
+      # **options - See Resource#initialize for details.
       # block - If supplied, the block is executed to provide options.
       #
       # Returns the name of the defined resource.
-      def resource(*args, &block)
-        Resource.define(self, *args, &block)
+      def resource(name, **options, &block)
+        Resource.define(self, name, **options, &block)
       end
 
       # Public: Defines a Configuration preset that can be reused in different

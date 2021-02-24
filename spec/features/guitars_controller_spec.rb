@@ -18,7 +18,7 @@ RSpec.describe GuitarsController, type: :controller do
       Given {
         expect(Guitar).to receive(:find).with('ES-335').and_return(guitar)
       }
-      When { get :show, request_params(id: 'ES-335') }
+      When { get :show, **request_params(id: 'ES-335') }
       Then { controller.guitar == guitar }
     end
 
@@ -26,7 +26,7 @@ RSpec.describe GuitarsController, type: :controller do
       Given {
         expect(Guitar).to receive(:find).with('ES-335').and_return(guitar)
       }
-      When { get :new, request_params(guitar_id: 'ES-335') }
+      When { get :new, **request_params(guitar_id: 'ES-335') }
       Then { controller.guitar == guitar }
     end
 
@@ -37,7 +37,7 @@ RSpec.describe GuitarsController, type: :controller do
   end
 
   context 'when build params are used' do
-    When { post :create, request_params(guitar: { name: 'strat' }) }
+    When { post :create, **request_params(guitar: { name: 'strat' }) }
     Then { controller.guitar.name == 'strat' }
   end
 
@@ -45,7 +45,7 @@ RSpec.describe GuitarsController, type: :controller do
     Given {
       expect(Guitar).to receive(:find).with('ES-335').and_return(guitar)
     }
-    When { get :show, request_params(id: 'ES-335') }
+    When { get :show, **request_params(id: 'ES-335') }
     Then { controller.guitar? == true }
   end
 end

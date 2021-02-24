@@ -2,7 +2,7 @@ require "action_controller"
 require "rails"
 
 def request_params(params)
-  { params: params, **params }
+  { params: params }
 end
 
 module Rails

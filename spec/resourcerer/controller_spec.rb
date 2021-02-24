@@ -39,6 +39,12 @@ RSpec.describe Resourcerer::Controller do
     And  { controller.method(:thing=).parameters.size == 1 }
   end
 
+  context 'incorrect proc options' do
+    Given { resource :thing, build: :thing }
+    When(:usage) { controller_thing }
+    Then { expect(usage).to have_failed(ArgumentError, /Can't handle :build => :thing option/) }
+  end
+
   context 'memoization' do
     Given { resource :thing, build: -> { SecureRandom.hex(32) } }
     Then { controller_thing == controller_thing }
